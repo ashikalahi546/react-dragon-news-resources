@@ -1,17 +1,42 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink} from "react-router-dom";
 import User from "/assets/user.png";
+import { useContext } from "react";
+import { AuthContext } from "../provider/AuthProvider";
 
 const Navber = () => {
+
+
+
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogOut = () => {
+    logOut()
+      .then((result) => {
+        console.log(result.user);
+      })
+      .cacth((error) => {
+        console.error(error);
+      });
+  };
+
   const navLinks = (
     <>
       <li>
-        <NavLink className={({isActive})=> isActive ? 'text-red-500' : ''} to="/">Home</NavLink>
+        <NavLink
+          className={({ isActive }) => (isActive ? "text-red-500" : "")}
+          to="/"
+        >
+          Home
+        </NavLink>
       </li>
       <li>
         <NavLink to="/about">About</NavLink>
       </li>
       <li>
-        <NavLink to='/career'>Career</NavLink>
+        <NavLink to="/career">Career</NavLink>
+      </li>
+      <li>
+        <NavLink to="/login">Login</NavLink>
       </li>
     </>
   );
@@ -19,7 +44,11 @@ const Navber = () => {
     <div className="navbar bg-base-100">
       <div className="navbar-start">
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden font-medium">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost lg:hidden font-medium"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -48,7 +77,13 @@ const Navber = () => {
       </div>
       <div className="navbar-end">
         <img className="size-10 mr-2" src={User} alt="" />
-        <Link className="btn ">Login</Link>
+        {user ? (
+          <Link onClick={handleLogOut} className="btn ">sing Out</Link>
+        ) : (
+          <Link to="/login" className="btn ">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );
